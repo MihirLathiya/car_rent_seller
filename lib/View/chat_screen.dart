@@ -122,11 +122,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                                           .docs[index1].id ==
                                                   snapshot
                                                       .data!.docs[index].id ||
-                                              snapshot.data!.docs[index].id +
+                                              snapshot1.data!.docs[index1].id +
                                                       firebaseAuth
                                                           .currentUser!.uid ==
-                                                  snapshot1
-                                                      .data!.docs[index1].id) {
+                                                  snapshot
+                                                      .data!.docs[index].id) {
                                             if (snapshot.data!.docs[index]
                                                     ['isChat'] ==
                                                 true) {
