@@ -122,162 +122,176 @@ class _ChatScreenState extends State<ChatScreen> {
                                               true) {
                                             return Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 13.0),
-                                              child: GestureDetector(
-                                                onTap: () async {
-                                                  String roomId =
-                                                      await chatRoomId(
-                                                          firebaseAuth
-                                                              .currentUser!.uid,
-                                                          snapshot1.data!
-                                                              .docs[index1].id);
-
-                                                  Get.to(
-                                                    () => ChatRoom(
-                                                      roomId: roomId,
-                                                      buyerName: snapshot1.data!
-                                                          .docs[index1]['name'],
-                                                      buyerId: snapshot1.data!
+                                                  top: 13.0,
+                                                  left: 10,
+                                                  right: 10),
+                                              child: Container(
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white38,
+                                                ),
+                                                padding: EdgeInsets.all(7),
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    String roomId =
+                                                        await chatRoomId(
+                                                      firebaseAuth
+                                                          .currentUser!.uid,
+                                                      snapshot1.data!
                                                           .docs[index1].id,
-                                                    ),
-                                                  );
-                                                },
-                                                child: Container(
-                                                  height: 100,
-                                                  margin: EdgeInsets.only(
-                                                      bottom: 10),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white12,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          '${snapshot1.data!.docs[index1]['image']}'),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
+                                                    );
+
+                                                    Get.to(
+                                                      () => ChatRoom(
+                                                        roomId: roomId,
+                                                        buyerName: snapshot1
+                                                                .data!
+                                                                .docs[index1]
+                                                            ['name'],
+                                                        buyerId: snapshot1.data!
+                                                            .docs[index1].id,
+                                                      ),
+                                                    );
+                                                  },
                                                   child: Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    color: Colors.black38,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        CommonText(
-                                                          text:
-                                                              '${snapshot1.data!.docs[index1]['name']}',
-                                                          color: Colors.white,
-                                                          weight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        StreamBuilder(
-                                                          stream:
-                                                              FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      "chatroom")
-                                                                  .doc(snapshot
-                                                                      .data!
-                                                                      .docs[
-                                                                          index]
-                                                                      .id)
-                                                                  .collection(
-                                                                      'chat')
-                                                                  .snapshots(),
-                                                          builder: (BuildContext
-                                                                  context,
-                                                              AsyncSnapshot<
-                                                                      QuerySnapshot<
-                                                                          Map<String,
-                                                                              dynamic>>>
-                                                                  snapshot3) {
-                                                            if (snapshot3
-                                                                .hasData) {
-                                                              Timestamp time1 =
-                                                                  snapshot3
-                                                                          .data!
-                                                                          .docs
-                                                                          .last[
-                                                                      'time'];
-                                                              DateTime
-                                                                  myDateTime =
-                                                                  time1
-                                                                      .toDate(); // Time
+                                                    clipBehavior: Clip
+                                                        .antiAliasWithSaveLayer,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                            '${snapshot1.data!.docs[index1]['image']}'),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(10),
+                                                      color: Colors.black38,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          CommonText(
+                                                            text:
+                                                                '${snapshot1.data!.docs[index1]['name']}',
+                                                            color: Colors.white,
+                                                            weight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          StreamBuilder(
+                                                            stream: FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "chatroom")
+                                                                .doc(snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .collection(
+                                                                    'chat')
+                                                                .snapshots(),
+                                                            builder: (BuildContext
+                                                                    context,
+                                                                AsyncSnapshot<
+                                                                        QuerySnapshot<
+                                                                            Map<String,
+                                                                                dynamic>>>
+                                                                    snapshot3) {
+                                                              if (snapshot3
+                                                                  .hasData) {
+                                                                Timestamp
+                                                                    time1 =
+                                                                    snapshot3
+                                                                            .data!
+                                                                            .docs
+                                                                            .last[
+                                                                        'time'];
+                                                                DateTime
+                                                                    myDateTime =
+                                                                    time1
+                                                                        .toDate(); // Time
 
-                                                              var time2 =
-                                                                  DateTime
-                                                                      .now();
-                                                              var time3 = time2
-                                                                          .difference(
-                                                                              myDateTime)
-                                                                          .inSeconds >
-                                                                      60
-                                                                  ? time2.difference(myDateTime).inMinutes >
-                                                                          60
-                                                                      ? time2.difference(myDateTime).inHours >
-                                                                              24
-                                                                          ? '${time2.difference(myDateTime).inDays}d'
-                                                                          : '${time2.difference(myDateTime).inHours}h'
-                                                                      : '${time2.difference(myDateTime).inMinutes}m'
-                                                                  : '${time2.difference(myDateTime).inSeconds}s';
+                                                                var time2 =
+                                                                    DateTime
+                                                                        .now();
+                                                                var time3 = time2
+                                                                            .difference(
+                                                                                myDateTime)
+                                                                            .inSeconds >
+                                                                        60
+                                                                    ? time2.difference(myDateTime).inMinutes >
+                                                                            60
+                                                                        ? time2.difference(myDateTime).inHours >
+                                                                                24
+                                                                            ? '${time2.difference(myDateTime).inDays}d'
+                                                                            : '${time2.difference(myDateTime).inHours}h'
+                                                                        : '${time2.difference(myDateTime).inMinutes}m'
+                                                                    : '${time2.difference(myDateTime).inSeconds}s';
 
-                                                              return Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: 20,
-                                                                    width: 200,
-                                                                    child: ListView
-                                                                        .builder(
-                                                                      shrinkWrap:
-                                                                          true,
-                                                                      reverse:
-                                                                          true,
-                                                                      itemCount:
-                                                                          1,
-                                                                      itemBuilder:
-                                                                          (context,
-                                                                              index3) {
-                                                                        return CommonText(
+                                                                return Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                      width:
+                                                                          200,
+                                                                      child: ListView
+                                                                          .builder(
+                                                                        shrinkWrap:
+                                                                            true,
+                                                                        reverse:
+                                                                            true,
+                                                                        itemCount:
+                                                                            1,
+                                                                        itemBuilder:
+                                                                            (context,
+                                                                                index3) {
+                                                                          return CommonText(
+                                                                            text:
+                                                                                '${snapshot3.data!.docs[index3]['message']}',
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size:
+                                                                                13,
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                    Column(
+                                                                      children: [
+                                                                        CommonText(
                                                                           text:
-                                                                              '${snapshot3.data!.docs[index3]['message']}',
+                                                                              '${time3} ago',
                                                                           color:
                                                                               Colors.white,
                                                                           size:
                                                                               13,
-                                                                        );
-                                                                      },
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                  ),
-                                                                  Column(
-                                                                    children: [
-                                                                      CommonText(
-                                                                        text:
-                                                                            '${time3} ago',
-                                                                        color: Colors
-                                                                            .white,
-                                                                        size:
-                                                                            13,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            }
-                                                            return SizedBox();
-                                                          },
-                                                        )
-                                                      ],
+                                                                  ],
+                                                                );
+                                                              }
+                                                              return SizedBox();
+                                                            },
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
