@@ -24,8 +24,7 @@ class EmailController extends GetxController {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email!, password: password!);
-      showAlert('SignUp Successful');
-      Get.offAll(() => SellerBottomBar());
+
       String? image = await imageAddController.uploadFile(
           file: imageAddController.userImage,
           filename: firebaseAuth.currentUser!.uid);
@@ -39,6 +38,9 @@ class EmailController extends GetxController {
         'status': 'Online',
         'image': image
       });
+      Get.offAll(() => SellerBottomBar());
+      showAlert('SignUp Successful');
+
       buttonController!.reset();
       SellerPrefrenceManager.setName(name!);
       SellerPrefrenceManager.setLogIn(email);

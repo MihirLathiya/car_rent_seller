@@ -10,10 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChatRoom extends StatefulWidget {
-  final buyerId, buyerName, roomId, image;
-  const ChatRoom(
-      {Key? key, this.buyerId, this.buyerName, this.roomId, this.image})
-      : super(key: key);
+  final buyerId, buyerName, roomId;
+  const ChatRoom({
+    Key? key,
+    this.buyerId,
+    this.buyerName,
+    this.roomId,
+  }) : super(key: key);
 
   @override
   State<ChatRoom> createState() => _ChatRoomState();
@@ -73,22 +76,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                 color: Colors.white,
                               ),
                             ),
-                            CircleAvatar(
-                              backgroundColor: Colors.white38,
-                              backgroundImage: NetworkImage(widget.image),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            CommonText(
-                              text: '${widget.buyerName}',
-                              size: 16,
-                              color: AppColors.white,
-                              weight: FontWeight.w700,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
                             StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('buyer')
@@ -101,15 +88,36 @@ class _ChatRoomState extends State<ChatRoom> {
                                       snapshot) {
                                 if (snapshot.hasData) {
                                   log('MESSAGE ${snapshot.data!['status']}');
-                                  return snapshot.data!['status'] == 'Online'
-                                      ? Icon(
-                                          Icons.sunny,
-                                          color: Colors.green,
-                                        )
-                                      : Icon(
-                                          Icons.nightlight_outlined,
-                                          color: Colors.red,
-                                        );
+                                  return Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.white38,
+                                        backgroundImage: NetworkImage(
+                                            '${snapshot.data!['image']}'),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      CommonText(
+                                        text: '${snapshot.data!['name']}',
+                                        size: 16,
+                                        color: AppColors.white,
+                                        weight: FontWeight.w700,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      snapshot.data!['status'] == 'Online'
+                                          ? Icon(
+                                              Icons.sunny,
+                                              color: Colors.green,
+                                            )
+                                          : Icon(
+                                              Icons.nightlight_outlined,
+                                              color: Colors.red,
+                                            ),
+                                    ],
+                                  );
                                 } else {
                                   return SizedBox();
                                 }
