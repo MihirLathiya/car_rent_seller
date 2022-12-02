@@ -4,6 +4,7 @@ import 'package:car_rent/Common/color.dart';
 import 'package:car_rent/Common/common_text.dart';
 import 'package:car_rent/Common/common_textfield.dart';
 import 'package:car_rent/Controller/email_controller.dart';
+import 'package:car_rent/Controller/get_user_data_controller.dart';
 import 'package:car_rent/View/car_add_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController search = TextEditingController();
   String email = '';
+  UserdataController userdataController = Get.put(UserdataController());
+  @override
+  void initState() {
+    userdataController.getUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // setStatusBarColor(App)
 
-    print('EMAIL $email');
     return Container(
       height: double.infinity,
       width: double.infinity,
