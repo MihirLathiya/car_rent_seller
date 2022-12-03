@@ -4,6 +4,7 @@ import 'package:car_rent/Controller/add_image_controller.dart';
 import 'package:car_rent/Controller/get_user_data_controller.dart';
 import 'package:car_rent/PrefrenceManager/prefrence_manager.dart';
 import 'package:car_rent/View/bottombar.dart';
+import 'package:car_rent/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -36,8 +37,11 @@ class EmailController extends GetxController {
         'password': password,
         'name': name,
         'status': 'Online',
-        'image': image
+        'image': image,
+        'fcm': ''
       });
+      await getFcmToken();
+
       Get.offAll(() => SellerBottomBar());
       showAlert('SignUp Successful');
 
@@ -73,6 +77,7 @@ class EmailController extends GetxController {
       Get.offAll(() => SellerBottomBar());
       if (firebaseAuth.currentUser!.uid.isNotEmpty) {
         userdataController.getListOfAllUser();
+        await getFcmToken();
       }
       buttonController!.reset();
     } on FirebaseAuthException catch (e) {

@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:car_rent/Controller/email_controller.dart';
+import 'package:car_rent/Notofication/notification.dart';
 import 'package:car_rent/PrefrenceManager/prefrence_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -37,5 +40,23 @@ class UserdataController extends GetxController {
 
     print('ALL DOCS IDS :- ${allData}');
     update();
+  }
+
+  sendButton() async {}
+
+  sendMessage({message}) async {
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('buyer');
+
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print('ALL DOCS IDS :- ${allData}');
+    allData.forEach((element) {
+      final data = Map<String, dynamic>.from(element as LinkedHashMap);
+      print('--element--${data['fcm']}');
+      AppNotificationHandler.sendMessage(
+          msg: message, receiverFcmToken: '${data['fcm']}');
+    });
   }
 }

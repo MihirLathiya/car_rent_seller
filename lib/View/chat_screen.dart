@@ -165,6 +165,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                                               .data!
                                                               .docs[index1]
                                                               .id,
+                                                          fcm: snapshot1.data!
+                                                                  .docs[index1]
+                                                              ['fcm'],
                                                         ),
                                                       );
                                                     },

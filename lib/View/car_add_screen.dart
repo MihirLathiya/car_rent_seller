@@ -8,6 +8,7 @@ import 'package:car_rent/Common/common_textfield.dart';
 import 'package:car_rent/Controller/bottom_controller.dart';
 import 'package:car_rent/Controller/driver_controller.dart';
 import 'package:car_rent/Controller/email_controller.dart';
+import 'package:car_rent/Controller/get_user_data_controller.dart';
 import 'package:car_rent/PrefrenceManager/prefrence_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -33,7 +34,7 @@ class _CarAddScreenState extends State<CarAddScreen> {
   TextEditingController carDriverNumber = TextEditingController();
   DriverController driverController = Get.put(DriverController());
   DropController dropController = Get.put(DropController());
-  LoadingController loadingController = Get.put(LoadingController());
+  UserdataController userdataController = Get.put(UserdataController());
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
   double val = 0;
@@ -450,33 +451,26 @@ class _CarAddScreenState extends State<CarAddScreen> {
                             ),
                           ),
                           SizedBox(height: 30),
-                          Obx(
-                            () => loadingController.loading.value == false
-                                ? SizedBox(
-                                    height: 50,
-                                    width: 200,
-                                    child: RoundedLoadingButton(
-                                      color: Colors.black,
-                                      borderRadius: 100,
-                                      child: Text(
-                                        'Add',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      controller: _btnController,
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          _btnController.start();
-                                          loadingController.isLoading();
-                                          addCarData();
-                                        } else {
-                                          _btnController.reset();
-                                        }
-                                      },
-                                    ),
-                                  )
-                                : Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                          SizedBox(
+                            height: 50,
+                            width: 200,
+                            child: RoundedLoadingButton(
+                              color: Colors.black,
+                              borderRadius: 100,
+                              child: Text(
+                                'Add',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              controller: _btnController,
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _btnController.start();
+                                  addCarData(_btnController);
+                                } else {
+                                  _btnController.reset();
+                                }
+                              },
+                            ),
                           )
                         ],
                       ),
@@ -518,7 +512,7 @@ class _CarAddScreenState extends State<CarAddScreen> {
     }
   }
 
-  Future uploadList() async {
+  Future uploadList(RoundedLoadingButtonController controller) async {
     int i = 1;
     String name = '${Random().nextInt(100000)}';
 
@@ -535,13 +529,13 @@ class _CarAddScreenState extends State<CarAddScreen> {
         });
       }
     } on firebase_storage.FirebaseException catch (e) {
-      loadingController.isNotLoading();
+      controller.reset();
     }
   }
 
-  void addCarData() async {
+  void addCarData(RoundedLoadingButtonController controller) async {
     try {
-      await uploadList().then(
+      await uploadList(controller).then(
         (value) => FirebaseFirestore.instance.collection('cars').add(
           {
             'sellerName': SellerPrefrenceManager.getName(),
@@ -572,16 +566,19 @@ class _CarAddScreenState extends State<CarAddScreen> {
           },
         ).catchError(
           (e) {
-            loadingController.isNotLoading();
+            controller.reset();
           },
         ).then((value) {
-          loadingController.isNotLoading();
-
           Get.back();
+          controller.reset();
+
+          userdataController.sendMessage(
+              message:
+                  '${SellerPrefrenceManager.getName()} added new ${carBrand.text.trim()} ${carName.text.trim()}');
         }),
       );
     } catch (e) {
-      loadingController.isNotLoading();
+      controller.reset();
     }
   }
 }

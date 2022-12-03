@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     SafeArea(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
                           children: [
                             CommonText(
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 5,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: CommonTextField(
                         prefixIcon: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -123,127 +123,133 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('cars')
-                    .where('CarSellerId',
-                        isEqualTo: firebaseAuth.currentUser!.uid)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var carData = snapshot.data!.docs[index];
-                        List x = carData['CarImage'];
-                        return Container(
-                          height: 224,
-                          width: width,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          margin: EdgeInsets.only(
-                              left: 5, right: 5, bottom: 10, top: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white12,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(0, 0),
-                                blurRadius: 5,
-                                color: AppColors.grey.withAlpha(50),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                height: 160,
-                                width: width,
-                                child: PageView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount: x.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 10, right: 10, top: 10),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: ImageLoading(
-                                          url: '${carData['CarImage'][index]}',
-                                          height: 160,
-                                          width: width,
-                                          // width: 110,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: [
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('cars')
+                      .where('CarSellerId',
+                          isEqualTo: firebaseAuth.currentUser!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var carData = snapshot.data!.docs[index];
+                          List x = carData['CarImage'];
+                          return Container(
+                            height: 224,
+                            width: width,
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            margin: EdgeInsets.only(
+                                left: 5, right: 5, bottom: 10, top: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white12,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(0, 0),
+                                  blurRadius: 5,
+                                  color: AppColors.grey.withAlpha(50),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  height: 160,
+                                  width: width,
+                                  child: PageView.builder(
+                                    physics: BouncingScrollPhysics(),
+                                    itemCount: x.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 10, right: 10, top: 10),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: ImageLoading(
+                                            url:
+                                                '${carData['CarImage'][index]}',
+                                            height: 160,
+                                            width: width,
+                                            // width: 110,
+                                          ),
                                         ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CommonText(
+                                            text: "${carData['CarName']}",
+                                            size: 16,
+                                            weight: FontWeight.w600,
+                                            color: Colors.white70,
+                                          ),
+                                          Spacer(),
+                                          CommonText(
+                                            text: '\$${carData['CarPrice']}',
+                                            size: 16,
+                                            weight: FontWeight.w700,
+                                            color: Colors.white70,
+                                          ),
+                                          CommonText(
+                                            text: '/Per Day',
+                                            size: 14,
+                                            color: Colors.white70,
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, right: 10, bottom: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        CommonText(
-                                          text: "${carData['CarName']}",
-                                          size: 16,
-                                          weight: FontWeight.w600,
-                                          color: Colors.white70,
-                                        ),
-                                        Spacer(),
-                                        CommonText(
-                                          text: '\$${carData['CarPrice']}',
-                                          size: 16,
-                                          weight: FontWeight.w700,
-                                          color: Colors.white70,
-                                        ),
-                                        CommonText(
-                                          text: '/Per Day',
-                                          size: 14,
-                                          color: Colors.white70,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 2),
-                                    Row(
-                                      children: [
-                                        CommonText(
-                                          text: 'Type :',
-                                          size: 12,
-                                          weight: FontWeight.w500,
-                                          color: Colors.white70,
-                                        ),
-                                        SizedBox(width: 5),
-                                        CommonText(
-                                          text: "${carData['CarType']}",
-                                          size: 12,
-                                          weight: FontWeight.w500,
-                                          color: Colors.white70,
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return loading();
-                  }
-                },
-              )
-            ],
+                                      SizedBox(height: 2),
+                                      Row(
+                                        children: [
+                                          CommonText(
+                                            text: 'Type :',
+                                            size: 12,
+                                            weight: FontWeight.w500,
+                                            color: Colors.white70,
+                                          ),
+                                          SizedBox(width: 5),
+                                          CommonText(
+                                            text: "${carData['CarType']}",
+                                            size: 12,
+                                            weight: FontWeight.w500,
+                                            color: Colors.white70,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return loading();
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

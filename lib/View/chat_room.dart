@@ -5,17 +5,20 @@ import 'package:car_rent/Common/chat_room.dart';
 import 'package:car_rent/Common/color.dart';
 import 'package:car_rent/Common/common_text.dart';
 import 'package:car_rent/Controller/email_controller.dart';
+import 'package:car_rent/Notofication/notification.dart';
+import 'package:car_rent/PrefrenceManager/prefrence_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChatRoom extends StatefulWidget {
-  final buyerId, buyerName, roomId;
+  final buyerId, buyerName, roomId, fcm;
   const ChatRoom({
     Key? key,
     this.buyerId,
     this.buyerName,
     this.roomId,
+    this.fcm,
   }) : super(key: key);
 
   @override
@@ -347,6 +350,9 @@ class _ChatRoomState extends State<ChatRoom> {
           'isCheck': false,
         },
       );
+      AppNotificationHandler.sendMessage(
+          msg: '${SellerPrefrenceManager.getName()} : ${message.text}',
+          receiverFcmToken: '${widget.fcm}');
     } else {
       print('Enter Something');
     }
