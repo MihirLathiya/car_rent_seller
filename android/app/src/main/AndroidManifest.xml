@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
    <application
-        android:label="car_rent"
+        android:label="Car_Rent"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -36,9 +36,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       <intent-filter>
-           <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-           <category android:name="android.intent.category.DEFAULT" />
-       </intent-filter>
     </application>
 </manifest>
